@@ -94,6 +94,11 @@ a{color:var(--accent)}.empty{color:var(--mute);padding:24px;text-align:center}
   th,td{padding:8px 10px}td.name{min-width:190px}
   h2{margin-top:28px}
 }
+.cta2{margin-top:28px;background:#1d2330;color:#fff;border-radius:14px;padding:22px 24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.cta2 b{font-size:18px;display:block;margin-bottom:4px}.cta2 span{color:#c9cfdb;font-size:14px}
+.cta2 .acts{display:flex;gap:10px;flex-wrap:wrap}.cta2 a{display:inline-block;padding:11px 16px;border-radius:10px;font-weight:600;text-decoration:none;font-size:14px}
+.cta2 a.p{background:#e5675e;color:#fff}.cta2 a.g{border:1px solid #4a5263;color:#fff}
+@media(max-width:600px){.cta2 .acts,.cta2 a{width:100%;text-align:center}}
 </style></head><body><header class="rhead"><div class="in">
   <div class="bar1"><a href="/"><img src="/assets/logo-light.svg" alt="РРЦ-монітор" height="34" style="display:block"></a><a href="/">rrcmonitor.com.ua</a></div>
   <div class="pill"><i></i>Автоматична перевірка цін на сайтах магазинів</div>
@@ -115,6 +120,7 @@ a{color:var(--accent)}.empty{color:var(--mute);padding:24px;text-align:center}
   <button class="btn" id="csv">Завантажити в Excel</button>
 </div>
 <div id="list"></div>
+<div class="cta2"><div><b>Такий звіт — щодня, по всьому асортименту</b><span>Нові порушення, хто виправив ціну, хто знизив її знову. Перший місяць −50%.</span></div><div class="acts"><a class="p" href="mailto:info@rrcmonitor.com.ua?subject=%D0%A9%D0%BE%D0%B4%D0%B5%D0%BD%D0%BD%D0%B8%D0%B9%20%D0%B7%D0%B2%D1%96%D1%82%20%D0%A0%D0%A0%D0%A6">Написати на пошту</a><a class="g" href="https://t.me/valnuz">Telegram @valnuz</a><a class="g" href="/#tarify">Тарифи</a></div></div>
 <div class="foot">Ціни перевіряються автоматично на сторінках магазинів: порушення — щодня, решта — раз на кілька днів. Порушення — ціна нижча за РРЦ постачальника.
 Позначка «за назвою» — на сторінці немає коду товару, товар визначено за моделлю в назві. Позначка «Hotline» — ціну магазину знайдено на Hotline.ua. Посилання веде на сторінку, де знайдено ціну.</div>
 </div>
@@ -127,6 +133,7 @@ function loadReport_() {
   window[cb] = d => {
     delete window[cb];
     if (!d || d.error) { document.getElementById('list').innerHTML = '<p style="padding:24px">Звіт не знайдено. Перевірте посилання.</p>'; return; }
+    document.title = 'Звіт РРЦ — ' + String(d.supplier || '').replace(/\s*\(.*\)\s*$/, '') + ' · РРЦ-монітор';
     start(d);
   };
   const sc = document.createElement('script');

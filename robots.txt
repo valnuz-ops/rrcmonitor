@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /r/
+Disallow: /demo/
+
+Sitemap: https://rrcmonitor.com.ua/sitemap.xml
