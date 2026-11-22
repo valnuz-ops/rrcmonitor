@@ -1,0 +1,430 @@
+<!DOCTYPE html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow"><title>Демо: моніторинг РРЦ EcoFlow</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1d2330;--mute:#6b7383;--line:#e4e7ec;--red:#c8372d;--red-bg:#fdeceb;--green:#1f8a4c;--green-bg:#e7f5ec;--accent:#2f5bd3}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:32px 0 12px}
+.sub{color:var(--mute);font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:20px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi b{display:block;font-size:28px;line-height:1.2}.kpi span{color:var(--mute);font-size:13px}
+.kpi.red b{color:var(--red)}.kpi.green b{color:var(--green)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.bar{height:10px;background:#e5675e;border-radius:6px;overflow:hidden;display:flex;margin:10px 0 6px}
+.bar i{display:block;height:100%}.bar .f{background:var(--green)}.bar .g{background:#f2c94c}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:12px;padding:3px 8px;border-radius:20px;background:var(--bg);border:1px solid var(--line)}
+.chip.ok{background:var(--green-bg);border-color:#bfe3cc}.chip.part{background:#fdf5d6;border-color:#f0dc8f}.chip.bad{background:var(--red-bg);border-color:#f3c7c3}
+.chip.link{cursor:pointer}.chip.link:hover{border-color:#8b93a3;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.shop.flash{box-shadow:0 0 0 3px #f2c94c;transition:box-shadow .3s}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+select,input[type=search]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff}
+input[type=search]{flex:1;min-width:200px}
+label.cb{font-size:14px;color:var(--mute);display:flex;gap:6px;align-items:center}
+.shop{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:8px;overflow:hidden}
+.shop>button{all:unset;cursor:pointer;display:grid;grid-template-columns:1fr auto auto;gap:16px;align-items:center;width:100%;padding:12px 16px;box-sizing:border-box}
+.shop>button:hover{background:#fafbfc}
+.dom{font-weight:600}.tag{font-size:11px;color:var(--mute);border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:6px;font-weight:400}
+.tag.rep{background:#d93025;border-color:#d93025;color:#fff;font-weight:600}.tag.rep2{border-color:#d93025;color:#d93025;font-weight:600}tr.rpsame td{background:#fdecea}.chip .rp{color:#d93025;font-weight:600;margin-left:4px}
+.cnt{font-size:13px;color:var(--mute);text-align:right}.cnt b{color:var(--ink);font-size:15px}
+.worst{color:var(--red);font-weight:600;min-width:60px;text-align:right}
+.det{display:none;border-top:1px solid var(--line);overflow-x:auto}.shop.open .det{display:block}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mute);font-weight:500;background:#fafbfc}td.name{white-space:normal;min-width:240px}
+td.num{text-align:right}td.neg{color:var(--red);font-weight:600;text-align:right}
+a{color:var(--accent)}.empty{color:var(--mute);padding:24px;text-align:center}
+.foot{color:var(--mute);font-size:12px;margin-top:32px}
+.btn{font:inherit;font-size:13px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);cursor:pointer}
+.btn:hover{background:#f0f2f5}.tools{display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line);background:#fafbfc}
+.mgrin{font:inherit;font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;width:180px;min-width:0}
+.mgrbox{display:flex;gap:8px;align-items:center;margin-left:auto}
+.mgr{font-size:11px;color:var(--accent);border:1px solid #c9d5f5;border-radius:4px;padding:1px 5px;margin-left:6px;font-weight:400}
+.promo{background:#fff4d6;border:1px solid #f0c75e;border-radius:12px;padding:14px 16px;margin:0 0 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.promo .pt{flex:1 1 380px}.promo b{font-size:16px}.promo .tm{font-variant-numeric:tabular-nums;font-weight:700;color:#b5470b}
+.promo .pa{display:flex;gap:8px;flex-wrap:wrap}
+.bp{font:inherit;font-size:14px;font-weight:600;padding:9px 14px;border-radius:8px;border:1px solid #1d2330;background:#1d2330;color:#fff;cursor:pointer;text-decoration:none;display:inline-block}
+.sub.acc{margin-top:4px;font-weight:600;color:#1d2330}.bp.ghost{background:#fff;color:#1d2330}.bp:hover{opacity:.9}
+.closed{max-width:560px;margin:60px auto;text-align:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:32px 24px}
+.closed h1{margin-bottom:10px}.closed p{color:var(--mute);margin:0 0 20px}
+@media(max-width:600px){.shop>button{grid-template-columns:1fr auto}.cnt{display:none}.mgrbox{margin-left:0;width:100%}.mgrin{flex:1;width:auto}
+  #fq{order:-1;flex:1 1 100%;min-width:0;box-sizing:border-box}.filters select{flex:1 1 40%;min-width:0}}
+.topnav{display:inline-flex;gap:4px;padding:4px;background:#fff;border:1px solid var(--line);border-radius:12px;margin:0 0 18px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.topnav a{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:9px;color:var(--mute);text-decoration:none;font-size:14px;font-weight:600;white-space:nowrap}
+.topnav a:hover{background:var(--bg);color:var(--ink)}.topnav a.on{background:var(--ink);color:#fff}
+.topnav svg{width:16px;height:16px;flex:none}
+@media(max-width:600px){.topnav{display:flex}.topnav a{flex:1;justify-content:center;padding:8px 6px;font-size:13px}}
+</style></head><body><div class="wrap">
+
+<div class="promo" id="promo" style="display:none"><div class="pt"><b>Безкоштовний доступ до звіту діє до 20:00 (за Києвом) 18 листопада.</b> Залишилось: <span class="tm" id="tm"></span><br>
+<span class="sub">Збережіть поточний стан порушень РРЦ або оформіть підписку, щоб звіт оновлювався щодня.</span></div>
+<div class="pa"><button class="bp" id="pdl">Завантажити звіт в Excel</button><a class="bp ghost" id="psub" href="#">Оформити підписку</a></div></div>
+<div class="promo" style="display:flex"><div class="pt"><b>Демо-звіт: 3 моделі EcoFlow, зріз на 22.11.2026.</b><br><span class="sub">РРЦ — ціна в авторизованому магазині EcoFlow Ukraine (ecoflowukraine.com). Ціни перевірено на сторінках самих магазинів і продавців Rozetka та Prom; кожне посилання веде на сторінку, де знайдено ціну. У повній версії моніторинг охоплює весь асортимент, оновлюється щодня і показує, хто виправив ціну після звернення.</span></div></div><h1>Моніторинг дотримання РРЦ — EcoFlow</h1>
+<div class="sub" id="sub"></div>
+<div class="kpis" id="kpis"></div>
+<div id="dyn"></div>
+<div id="compl"></div>
+<h2>Магазини, що продають нижче РРЦ</h2>
+<div class="filters">
+  <select id="fg" style="display:none"><option value="">Усі менеджери</option><option value="__none">Без менеджера</option></select>
+  <select id="fb"><option value="">Усі бренди</option></select>
+  <input type="search" id="fq" placeholder="Пошук: магазин, код або назва товару">
+  <label class="cb"><input type="checkbox" id="fm"> без маркетплейсів</label>
+  <button class="btn" id="csv">Завантажити в Excel</button>
+</div>
+<div id="list"></div>
+<div class="foot">Демо-зріз 22.11.2026. У робочій версії ціни перевіряються автоматично щодня на сторінках магазинів. Порушення — ціна нижча за РРЦ постачальника.
+Позначка «за назвою» — на сторінці немає коду товару, товар визначено за моделлю в назві. Позначка «Hotline» — ціну магазину знайдено на Hotline.ua. Посилання веде на сторінку, де знайдено ціну.</div>
+</div>
+<script>
+const D0 = {"supplier": "EcoFlow (демо-звіт, 3 моделі)", "updated": "22.11.2026", "kpi": {"shops": 14, "shopsNoMp": 8, "items": 14, "avg": -24.9, "checkedShops": 0, "checkedPages": 0}, "trend": [], "fixedWeeks": [], "complaints": [], "shops": [{"d": "Techzone", "dom": "Techzone", "sn": "", "mp": false, "off": true, "items": [{"v": "EFD3A-UPS-EU", "n": "Зарядна станція EcoFlow DELTA 3 1000 Air", "b": "EcoFlow", "rrp": 28999, "p": 26999, "diff": -6.9, "at": "22.11.2026", "since": "22.11.2026", "u": "https://techzone.com.ua/zaryadna-stantsya-ecoflow-delta-3-1000-air-efd3a-ups-eu/p1318319/", "hl": false}], "n": 1}, {"d": "MegaLot", "dom": "MegaLot", "sn": "", "mp": false, "off": true, "items": [{"v": "EFRIVER3Plus-EU-CBOX", "n": "Зарядна станція EcoFlow RIVER 3 Plus", "b": "EcoFlow", "rrp": 18999, "p": 17999, "diff": -5.3, "at": "22.11.2026", "since": "22.11.2026", "u": "https://megalot.com.ua/avtonomne-givlennya/%D0%B7%D0%B0%D1%80%D1%8F%D0%B4%D0%BD%D1%96-%D1%81%D1%82%D0%B0%D0%BD%D1%86%D1%96%D1%97/%D0%B7%D0%B0%D1%80%D1%8F%D0%B4%D0%BD%D1%96-%D1%81%D1%82%D0%B0%D0%BD%D1%86%D1%96%D1%97-ecoflow/zaryadna-stantsiya-ecoflow-river-3-plus.html", "hl": false}], "n": 1}, {"d": "mydim.com.ua", "dom": "mydim.com.ua", "sn": "", "mp": false, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 33500, "diff": -36.8, "at": "22.11.2026", "since": "22.11.2026", "u": "https://mydim.com.ua/products/zaryadna-stantsiya-ecoflow-delta-3-plus", "hl": false}], "n": 1}, {"d": "ustore.com.ua", "dom": "ustore.com.ua", "sn": "", "mp": false, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 33510, "diff": -36.8, "at": "22.11.2026", "since": "22.11.2026", "u": "https://ustore.com.ua/products/zaryadna-stantsiya-ecoflow-delta-3-plus", "hl": false}], "n": 1}, {"d": "g-store.com.ua", "dom": "g-store.com.ua", "sn": "", "mp": false, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 33514, "diff": -36.8, "at": "22.11.2026", "since": "22.11.2026", "u": "https://g-store.com.ua/zaryadna-stanciya-ecoflow-delta-3-plus/", "hl": false}], "n": 1}, {"d": "apolo.com.ua", "dom": "apolo.com.ua", "sn": "", "mp": false, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 33514, "diff": -36.8, "at": "22.11.2026", "since": "22.11.2026", "u": "https://apolo.com.ua/zaryadna-stantsiya-ecoflow-delta-3-plus-ef_delta3plus-ru-uk", "hl": false}], "n": 1}, {"d": "ECO-X · prom.ua", "dom": "prom.ua", "sn": "ECO-X", "mp": true, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 37799, "diff": -28.7, "at": "22.11.2026", "since": "22.11.2026", "u": "https://prom.ua/ua/m-7000152742005228017-zaryadnaya-stantsiya-ecoflow.html", "hl": false}], "n": 1}, {"d": "Bless-market.com.ua · prom.ua", "dom": "prom.ua", "sn": "Bless-market.com.ua", "mp": true, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 37969.8, "diff": -28.4, "at": "22.11.2026", "since": "22.11.2026", "u": "https://prom.ua/ua/m7501864501491914980-zaryadnaya-stantsiya-ecoflow.html", "hl": false}], "n": 1}, {"d": "ti.ua", "dom": "ti.ua", "sn": "", "mp": false, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 38499, "diff": -27.4, "at": "22.11.2026", "since": "22.11.2026", "u": "https://ti.ua/ua/zaryadnaya-stantsiya-ecoflow-delta-3-plus-ef-delta3plus.html", "hl": false}], "n": 1}, {"d": "Artilugio · rozetka.com.ua", "dom": "rozetka.com.ua", "sn": "Artilugio", "mp": true, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 38999, "diff": -26.4, "at": "22.11.2026", "since": "22.11.2026", "u": "https://rozetka.com.ua/ua/602826088/p602826088/", "hl": false}], "n": 1}, {"d": "Все з турботою · prom.ua", "dom": "prom.ua", "sn": "Все з турботою", "mp": true, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 40000, "diff": -24.5, "at": "22.11.2026", "since": "22.11.2026", "u": "https://prom.ua/ua/m-661200501777429053-zaryadnaya-stantsiya-ecoflow.html", "hl": false}], "n": 1}, {"d": "KucLTD · rozetka.com.ua", "dom": "rozetka.com.ua", "sn": "KucLTD", "mp": true, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 41099, "diff": -22.5, "at": "22.11.2026", "since": "22.11.2026", "u": "https://rozetka.com.ua/ua/602826088/p602826088/", "hl": false}], "n": 1}, {"d": "thm · prom.ua", "dom": "prom.ua", "sn": "thm", "mp": true, "off": false, "items": [{"v": "EFDELTA3P-EU", "n": "Зарядна станція EcoFlow DELTA 3 Plus", "b": "EcoFlow", "rrp": 52999, "p": 43729, "diff": -17.5, "at": "22.11.2026", "since": "22.11.2026", "u": "https://prom.ua/ua/m-6731658468394151581-zaryadnaya-stantsiya-ecoflow.html", "hl": false}], "n": 1}, {"d": "energybro.com.ua", "dom": "energybro.com.ua", "sn": "", "mp": false, "off": false, "items": [{"v": "EFD3A-UPS-EU", "n": "Зарядна станція EcoFlow DELTA 3 1000 Air", "b": "EcoFlow", "rrp": 28999, "p": 24780, "diff": -14.5, "at": "22.11.2026", "since": "22.11.2026", "u": "https://www.energybro.com.ua/product-page/%D0%B7%D0%B0%D1%80%D1%8F%D0%B4%D0%BD%D0%B0-%D1%81%D1%82%D0%B0%D0%BD%D1%86%D1%96%D1%8F-ecoflow-delta-3-1000-air", "hl": false}], "n": 1}], "rep": {}};
+const DEADLINE = 0;
+setTimeout(() => start(D0), 0);
+// З 22.11.2026: один товар (код) в одному магазині — один рядок.
+// Магазини з кількома мовними версіями (elvis.com.ua: /product, /en/product, /ru/product) давали 2–3 однакові рядки.
+// Залишаємо: спершу знайдене за кодом (не «за назвою»), потім українську сторінку (без /ru/, /en/), потім найнижчу ціну.
+function dedupe_(D) {
+  const lang = u => /\/(ru|en)(\/|$)|-(ru|en)\.html/i.test(u || '') ? 1 : 0;
+  const better = (a, b) => (a.nm ? 1 : 0) - (b.nm ? 1 : 0) || lang(a.u) - lang(b.u) || a.p - b.p;
+  const cut = {};
+  let removed = 0;
+  D.shops.forEach(s => {
+    const best = {}, order = [];
+    s.items.forEach(i => {
+      if (!best[i.v]) { best[i.v] = i; order.push(i.v); }
+      else if (better(i, best[i.v]) < 0) best[i.v] = i;
+    });
+    const n = s.items.length - order.length;
+    if (n) { removed += n; cut[s.dom || s.d] = (cut[s.dom || s.d] || 0) + n; s.items = order.map(v => best[v]); s.n = s.items.length; }
+  });
+  if (!removed) return;
+  const all = []; D.shops.forEach(s => s.items.forEach(i => all.push(i)));
+  D.kpi.items = all.length;
+  if (all.length) D.kpi.avg = Math.round(all.reduce((a, i) => a + i.diff, 0) / all.length * 10) / 10;
+  (D.complaints || []).forEach(c => {
+    (c.stores || []).forEach(st => { if (cut[st.d]) { const k = Math.min(cut[st.d], st.now); st.now -= k; c.now -= k; } });
+  });
+}
+function start(D) {
+dedupe_(D);
+const $ = id => document.getElementById(id);
+// З 18.11.2026: плашка з таймером до кінця безкоштовного доступу
+(function promo() {
+  return;                                          // з 19.11.2026: плашку з кнопкою підписки не показуємо
+  if (Date.now() >= DEADLINE) return;              // сюди після дедлайну потрапляє лише власник — без плашки
+  $('promo').style.display = '';
+  $('psub').href = SUB_MAIL;
+  $('pdl').onclick = () => { const all = []; D.shops.forEach(s => s.items.forEach(i => all.push({ s: s, i: i }))); downloadXlsx(all, 'rrc-porushennia-' + today()); };
+  const two = n => String(n).padStart(2, '0');
+  const tick = () => {
+    const left = DEADLINE - Date.now();
+    if (left <= 0) { clearInterval(tm); if (OWNER) $('promo').style.display = 'none'; else closePage_(); return; }
+    const s = Math.floor(left / 1000);
+    $('tm').textContent = two(Math.floor(s / 3600)) + ':' + two(Math.floor(s / 60) % 60) + ':' + two(s % 60);
+  };
+  const tm = setInterval(tick, 1000); tick();
+})();
+// З 16.11.2026: кириличні домени (xn--…) показуємо кирилицею
+function pdec_(s) {
+  try {
+    let n = 128, i = 0, bias = 72; const out = [], b = s.lastIndexOf('-');
+    for (let j = 0; j < b; j++) out.push(s.charCodeAt(j));
+    for (let k = b > 0 ? b + 1 : 0; k < s.length;) {
+      const oi = i;
+      for (let w = 1, t = 36; ; t += 36) {
+        const c = s.charCodeAt(k++);
+        const dg = c - 48 < 10 ? c - 22 : c - 65 < 26 ? c - 65 : c - 97 < 26 ? c - 97 : 36;
+        if (dg >= 36 || k > s.length) throw 0;
+        i += dg * w;
+        const tt = t <= bias ? 1 : t >= bias + 26 ? 26 : t - bias;
+        if (dg < tt) break;
+        w *= 36 - tt;
+      }
+      const L = out.length + 1;
+      let d = oi === 0 ? Math.floor((i - oi) / 700) : (i - oi) >> 1, kk = 0;
+      d += Math.floor(d / L);
+      for (; d > 455; kk += 36) d = Math.floor(d / 35);
+      bias = Math.floor(kk + 36 * d / (d + 38));
+      n += Math.floor(i / L); i %= L; out.splice(i++, 0, n);
+    }
+    return String.fromCodePoint.apply(null, out);
+  } catch (e) { return 'xn--' + s; }
+}
+const dn = d => String(d || '').split('.').map(l => /^xn--/i.test(l) ? pdec_(l.slice(4).toLowerCase()) : l).join('.');
+const el = (t, cls, txt) => { const e = document.createElement(t); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; };
+const money = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' грн';
+const pct = n => (n > 0 ? '+' : '') + String(n).replace('.', ',') + '%';
+
+$('sub').textContent = 'Постачальник: ' + D.supplier + (D.updated ? ' · дані на ' + D.updated : '');
+
+function kpi(val, label, cls) { const k = el('div', 'kpi' + (cls ? ' ' + cls : '')); k.appendChild(el('b', '', val)); k.appendChild(el('span', '', label)); $('kpis').appendChild(k); }
+kpi(D.kpi.shops, 'магазинів нижче РРЦ' + (D.kpi.shops !== D.kpi.shopsNoMp ? ' (з них маркетплейсів: ' + (D.kpi.shops - D.kpi.shopsNoMp) + ')' : ''), 'red');
+kpi(D.kpi.items, 'товарних позицій нижче РРЦ', 'red');
+kpi(D.kpi.avg ? pct(D.kpi.avg) : '—', 'середнє відхилення від РРЦ');
+kpi(2, 'з них офіційні партнери EcoFlow', 'red'); kpi('2', 'типи джерел: сайти магазинів і маркетплейси Rozetka/Prom');
+if (D.kpi.fixed30) kpi(D.kpi.fixed30, 'позицій виправлено за 30 днів', 'green');
+if (D.kpi.repeat) kpi(D.kpi.repeat, 'магазинів знову знизили ціну після виправлення', 'red');
+
+// З 16.11.2026: динаміка — щоденні знімки (лист «Динаміка») і виправлення по тижнях
+(function dyn() {
+  const T = D.trend || [], F = D.fixedWeeks || [];
+  if (!T.length && !F.length) return;
+  const box = $('dyn');
+  box.appendChild(el('h2', '', 'Динаміка'));
+  const card = el('div', 'card'); box.appendChild(card);
+  const cur = T[T.length - 1];
+  if (cur) {
+    const ago = T.filter(x => x.t <= cur.t - 6 * 864e5).pop() || T[0];
+    if (ago && ago !== cur) {
+      const dd = (a, b, f) => { const v = a - b; return v === 0 ? 'без змін' : (v < 0 ? '▼ ' : '▲ ') + f(Math.abs(v)); };
+      card.appendChild(el('div', '', 'Порівняно з ' + ago.d + ': магазинів-порушників ' + dd(cur.s, ago.s, String) +
+        ', позицій ' + dd(cur.i, ago.i, String) + '.'));
+    }
+  }
+  const NS = 'http' + '://www.w3.org/2000/svg';
+  const svg = (w, h) => { const e = document.createElementNS(NS, 'svg'); e.setAttribute('viewBox', '0 0 ' + w + ' ' + h); e.setAttribute('width', '100%'); e.style.maxWidth = w + 'px'; e.style.display = 'block'; e.style.marginTop = '10px'; return e; };
+  const node = (t, a, txt) => { const e = document.createElementNS(NS, t); Object.keys(a).forEach(k => e.setAttribute(k, a[k])); if (txt !== undefined) e.textContent = txt; return e; };
+  if (T.length >= 2) {
+    card.appendChild(el('div', 'sub', 'Магазинів нижче РРЦ (червоне) і позицій нижче РРЦ (сіре) по днях'));
+    const W = 680, H = 180, P = 28, s = svg(W, H);
+    const max = Math.max.apply(null, T.map(x => Math.max(x.i, x.s))) || 1;
+    const X = k => P + (W - 2 * P) * (T.length === 1 ? 0 : k / (T.length - 1)), Y = v => H - P - (H - 2 * P) * v / max;
+    [['i', '#9aa3b2'], ['s', '#c8372d']].forEach(([f, c]) => {
+      s.appendChild(node('polyline', { points: T.map((x, k) => X(k) + ',' + Y(x[f])).join(' '), fill: 'none', stroke: c, 'stroke-width': 2 }));
+      const lx = T.length - 1; s.appendChild(node('text', { x: X(lx) + 4, y: Y(T[lx][f]) + 4, 'font-size': 11, fill: c }, T[lx][f]));
+    });
+    [0, T.length - 1].forEach(k => s.appendChild(node('text', { x: X(k), y: H - 8, 'font-size': 11, fill: '#6b7383', 'text-anchor': k ? 'end' : 'start' }, T[k].d)));
+    card.appendChild(s);
+  } else {
+    card.appendChild(el('div', 'sub', 'Щоденна статистика збирається з 16.11.2026 — графік по днях з’явиться за кілька днів.'));
+  }
+  if (F.length) {
+    card.appendChild(el('div', 'sub', 'Скільки позицій магазини виправили — по тижнях (тиждень з понеділка). Сірі — до звернень постачальника, зелені — після звернень.'));
+    const W = 680, H = 170, P = 24, s = svg(W, H);
+    const max = Math.max.apply(null, F.map(x => x.n)) || 1, bw = (W - 2 * P) / F.length;
+    F.forEach((x, k) => {
+      const h = (H - 2 * P - 10) * x.n / max, x0 = P + k * bw;
+      s.appendChild(node('rect', { x: x0 + bw * 0.15, y: H - P - h, width: bw * 0.7, height: h, rx: 3, fill: x.after ? '#1f8a4c' : '#b4bac6' }));
+      if (k && x.after && !F[k - 1].after) s.appendChild(node('line', { x1: x0, y1: 8, x2: x0, y2: H - P, stroke: '#9aa3b2', 'stroke-dasharray': '4 3' }));
+      if (k && x.after && !F[k - 1].after) s.appendChild(node('text', { x: x0 + 4, y: 16, 'font-size': 11, fill: '#6b7383' }, 'перші звернення'));
+      s.appendChild(node('text', { x: x0 + bw / 2, y: H - P - h - 4, 'font-size': 11, 'text-anchor': 'middle', fill: '#1d2330' }, x.n));
+      s.appendChild(node('text', { x: x0 + bw / 2, y: H - 6, 'font-size': 11, 'text-anchor': 'middle', fill: '#6b7383' }, x.w));
+    });
+    card.appendChild(s);
+  }
+})();
+
+if (D.complaints.length) {
+  $('compl').appendChild(el('h2', '', 'Стан магазинів'));
+  D.complaints.forEach(c => {
+    const card = el('div', 'card');
+    const total = c.fixed + c.gone + c.now;
+    const h = el('div'); h.appendChild(el('b', '', 'Зараз' + (D.updated ? ', ' + D.updated : '')));
+    card.appendChild(h);
+    const bar = el('div', 'bar');
+    const f = el('i', 'f'); f.style.width = (total ? c.fixed / total * 100 : 0) + '%';
+    const g = el('i', 'g'); g.style.width = (total ? c.gone / total * 100 : 0) + '%';
+    bar.appendChild(f); bar.appendChild(g); card.appendChild(bar);
+    card.appendChild(el('div', 'sub', 'Виправили ціну: ' + c.fixed + ' поз.' +
+      (c.gone ? ' · прибрали з продажу / немає в наявності: ' + c.gone : '') + ' · зараз нижче РРЦ: ' + c.now + ' поз.' +
+      ' · магазинів без порушень зараз: ' + c.shopsClean + ' з ' + c.shopsAll));
+    const chips = el('div', 'chips');
+    card.appendChild(el('div', 'sub', 'На плашці: скільки позицій магазин виправив і скільки зараз нижче РРЦ. Зелений — зараз порушень немає; жовтий — частину виправив, але ще є нижче РРЦ; червоний — нічого не виправив. 🔁 повторно — магазин виправив позицію, а потім знову опустив її ціну нижче РРЦ; у списку позицій вона позначена «🔁 знову знизив». На смузі: зелене — виправлено, жовте — прибрали з продажу, червоне — зараз нижче РРЦ.'));
+    const note = el('div', 'sub');
+    c.stores.forEach(s => {
+      const t = dn(s.d) + (s.fixed ? ' · виправив ' + s.fixed : '') + (s.gone ? ' · прибрав ' + s.gone : '') + (s.now ? ' · нижче РРЦ ' + s.now : '');
+      const ch = el('span', 'chip link ' + (!s.now ? 'ok' : (s.fixed || s.gone ? 'part' : 'bad')), t);
+      ch.title = 'Показати позиції магазину нижче';
+      const rp = D.rep && D.rep[String(s.d).toLowerCase()];
+      if (rp) { ch.appendChild(el('span', 'rp', '🔁 повторно')); ch.title = 'Після виправлення знову знизив ціну (' + rp.n + ' поз., останній раз ' + rp.last + '). ' + ch.title; }
+      ch.onclick = () => showShop(s.d, note);           // з 16.11.2026: клік — до магазину у списку нижче
+      chips.appendChild(ch);
+    });
+    card.appendChild(chips);
+    card.appendChild(note);
+    $('compl').appendChild(card);
+  });
+}
+
+// З 16.11.2026: звернення до магазину, вивантаження в Excel (CSV), менеджери
+function copyText(txt, b) {
+  const old = b.textContent;
+  const done = () => { b.textContent = 'Скопійовано ✓'; setTimeout(() => { b.textContent = old; }, 1500); };
+  const fallback = () => {
+    const ta = el('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) { b.textContent = 'Не вдалося скопіювати'; }
+    ta.remove();
+  };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(done, fallback); else fallback();
+}
+function letter(s, items) {
+  const L = ['Добрий день!', '', (s.sn ? 'У вашому магазині ' + s.sn + ' на ' + s.dom : 'На сайті ' + dn(s.d)) + ' ціни на такі товари нижчі за рекомендовані роздрібні ціни (РРЦ) ' + D.supplier + ':', ''];
+  items.forEach((i, k) => {
+    L.push((k + 1) + '. ' + i.n + ' (код ' + i.v + ') — ціна ' + money(i.p) + ', РРЦ ' + money(i.rrp) + ' (' + pct(i.diff) + ')');
+    if (i.u) L.push('   ' + i.u);
+  });
+  L.push('', 'Просимо привести ціни у відповідність до РРЦ.', '', 'Дякуємо!');
+  return L.join('\n');
+}
+function downloadCsv(rows, name) {
+  const q = v => { v = String(v === undefined || v === null ? '' : v); return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+  const head = ['Магазин', 'Менеджер', 'Код', 'Товар', 'Бренд', 'РРЦ', 'Ціна в магазині', 'Відхилення %', 'Нижче РРЦ з', 'Перевірено', 'Посилання'];
+  const lines = [head].concat(rows.map(x => [dn(x.s.d), x.s.mgr, x.i.v, x.i.n, x.i.b, x.i.rrp, x.i.p, String(x.i.diff).replace('.', ','), x.i.since || '', x.i.at, x.i.u]));
+  const text = String.fromCharCode(0xFEFF) + lines.map(r => r.map(q).join(';')).join('\r\n');
+  const a = el('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' })); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+// З 16.11.2026: справжній файл Excel (.xlsx) через бібліотеку SheetJS; якщо вона не завантажилась — CSV
+function downloadXlsx(rows, name) {
+  const head = ['Магазин', 'Юрособа', 'Менеджер', 'Код', 'Товар', 'Бренд', 'РРЦ, грн', 'Ціна в магазині, грн', 'Відхилення, %', 'Нижче РРЦ з', 'Перевірено', 'Посилання'];
+  const aoa = [head].concat(rows.map(x => [dn(x.s.d), x.s.legal || '', x.s.mgr || '', x.i.v, x.i.n, x.i.b, x.i.rrp, x.i.p, x.i.diff, x.i.since || '', x.i.at, x.i.u]));
+  const go = () => {
+    const X = window.XLSX;
+    const ws = X.utils.aoa_to_sheet(aoa);
+    ws['!cols'] = [22, 34, 16, 12, 60, 14, 10, 18, 14, 13, 12, 50].map(w => ({ wch: w }));
+    ws['!autofilter'] = { ref: ws['!ref'] };
+    for (let r = 1; r < aoa.length; r++) {
+      const c = ws[X.utils.encode_cell({ r: r, c: 11 })];
+      if (c && c.v) c.l = { Target: String(c.v) };
+    }
+    const wb = X.utils.book_new();
+    X.utils.book_append_sheet(wb, ws, 'Порушення');
+    X.writeFile(wb, name + '.xlsx');
+  };
+  if (window.XLSX) return go();
+  const sc = el('script');
+  sc.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+  sc.onload = go;
+  sc.onerror = () => downloadCsv(rows, name + '.csv');
+  document.head.appendChild(sc);
+}
+// З 16.11.2026: «нижче РРЦ з» → «12.11 · 4 дн.»
+const sinceTxt = d => { const m = String(d || '').match(/(\d{2})\.(\d{2})\.(\d{4})/); if (!m) return '—';
+  const days = Math.max(0, Math.floor((Date.now() - new Date(+m[3], +m[2] - 1, +m[1]).getTime()) / 864e5));
+  return m[1] + '.' + m[2] + ' · ' + days + ' дн.'; };
+const today = () => { const d = new Date(); return String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + d.getFullYear(); };
+let CUR = [];
+const OPEN = {};
+const CAN_EDIT = typeof API !== 'undefined';
+const dl = el('datalist'); dl.id = 'mgrlist'; document.body.appendChild(dl);
+function buildMgrs(first) {
+  const mgrs = {};
+  D.shops.forEach(s => { if (s.mgr) mgrs[s.mgr] = (mgrs[s.mgr] || 0) + 1; });
+  const keep = $('fg').value;
+  while ($('fg').options.length > 2) $('fg').remove(2);
+  dl.textContent = '';
+  Object.keys(mgrs).sort().forEach(m => {
+    const o = el('option', '', m + ' (' + mgrs[m] + ')'); o.value = m; $('fg').appendChild(o);
+    const d = el('option'); d.value = m; dl.appendChild(d);
+  });
+  $('fg').style.display = Object.keys(mgrs).length ? '' : 'none';
+  if (first) { let pm = ''; try { pm = new URLSearchParams(location.search).get('m') || ''; } catch (e) {} if (pm && mgrs[pm]) $('fg').value = pm; }
+  else $('fg').value = (keep === '__none' || mgrs[keep]) ? keep : '';
+}
+buildMgrs(true);
+function saveMgr(s, val, b) {
+  b.disabled = true; b.textContent = 'Зберігаю…';
+  fetch(API + '?format=json&action=setmgr&k=' + encodeURIComponent(K) + '&d=' + encodeURIComponent(s.d) + '&m=' + encodeURIComponent(val))
+    .then(r => r.json())
+    .then(r => {
+      if (r.error) throw new Error(r.error);
+      s.mgr = r.m; buildMgrs(false); render();
+    })
+    .catch(() => { b.disabled = false; b.textContent = 'Помилка — спробуйте ще'; });
+}
+$('csv').onclick = () => downloadXlsx(CUR, 'rrc-porushennia-' + today());
+
+const brands = {};
+D.shops.forEach(s => s.items.forEach(i => { if (i.b) brands[i.b] = (brands[i.b] || 0) + 1; }));
+Object.keys(brands).sort().forEach(b => { const o = el('option', '', b + ' (' + brands[b] + ')'); o.value = b; $('fb').appendChild(o); });
+
+// З 16.11.2026: показати магазин зі звернень у списку нижче (відкритим), якщо він ще порушує
+function showShop(d, note) {
+  d = String(d).toLowerCase();
+  const hit = D.shops.filter(x => String(x.dom || x.d).toLowerCase() === d || x.d.toLowerCase() === d);
+  note.textContent = '';
+  if (!hit.length) { note.textContent = dn(d) + ' — зараз у списку порушників немає: усі позиції виправлено або знято з продажу.'; return; }
+  $('fg').value = ''; $('fb').value = ''; $('fm').checked = false; $('fq').value = dn(d);
+  hit.forEach(x => { OPEN[x.d] = true; });
+  render();
+  const first = document.querySelector('#list .shop');
+  if (first) {
+    first.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('#list .shop').forEach(b => { b.classList.add('flash'); setTimeout(() => b.classList.remove('flash'), 1600); });
+  }
+}
+function render() {
+  const fb = $('fb').value, q = $('fq').value.trim().toLowerCase(), fm = $('fm').checked, fg = $('fg').value;
+  const list = $('list'); list.textContent = '';
+  let shown = 0;
+  CUR = [];
+  D.shops.forEach(s => {
+    if (fm && s.mp) return;
+    if (fg && (fg === '__none' ? s.mgr : s.mgr !== fg)) return;
+    let items = s.items.filter(i => !fb || i.b === fb);
+    if (q && s.d.toLowerCase().indexOf(q) < 0 && dn(s.d).toLowerCase().indexOf(q) < 0) items = items.filter(i => (i.v + ' ' + i.n).toLowerCase().indexOf(q) >= 0);
+    if (!items.length) return;
+    shown++;
+    items.forEach(i => CUR.push({ s: s, i: i }));
+    const box = el('div', 'shop');
+    const btn = el('button');
+    const name = el('div'); name.appendChild(el('span', 'dom', dn(s.d))); if (s.mp) name.appendChild(el('span', 'tag', 'маркетплейс'));
+    if (s.off) name.appendChild(el('span', 'tag rep', 'офіційний партнер')); else name.appendChild(el('span', 'tag', 'неофіційний продавець'));
+    if (s.rep) name.appendChild(el('span', 'tag rep', 'повторно'));
+    if (s.mgr) name.appendChild(el('span', 'mgr', s.mgr));
+    if (s.rep) name.appendChild(el('div', 'sub', 'після виправлення знову знизив ціну: ' + s.rep.n + ' поз., останній раз ' + s.rep.last));
+    if (s.since) name.appendChild(el('div', 'sub', 'порушує щонайменше з ' + s.since));
+    if (s.legal) name.appendChild(el('div', 'sub', s.legal));
+    if (s.sn) name.appendChild(el('div', 'sub', 'продавець на ' + s.dom));
+    if (s.also) name.appendChild(el('div', 'sub', 'той самий магазин: ' + s.also));
+    const cnt = el('div', 'cnt'); cnt.appendChild(el('b', '', items.length)); cnt.appendChild(document.createTextNode(' поз.'));
+    btn.appendChild(name); btn.appendChild(cnt); btn.appendChild(el('div', 'worst', pct(items[0].diff)));
+    if (OPEN[s.d]) box.classList.add('open');
+    btn.onclick = () => { box.classList.toggle('open'); OPEN[s.d] = box.classList.contains('open'); };
+    box.appendChild(btn);
+    const det = el('div', 'det'), t = el('table'), hr = el('tr');
+    const tools = el('div', 'tools');
+    const b1 = el('button', 'btn', 'Скопіювати звернення до магазину');
+    b1.onclick = () => copyText(letter(s, items), b1);
+    const b2 = el('button', 'btn', 'Завантажити в Excel');
+    b2.onclick = () => downloadXlsx(items.map(i => ({ s: s, i: i })), 'rrc-' + s.d.split(' · ').join('-').split(' ').join('-') + '-' + today());
+    tools.appendChild(b1); tools.appendChild(b2);
+    if (s.su) { const a = el('a', 'btn', 'Сторінка продавця'); a.href = s.su; a.target = '_blank'; a.rel = 'noopener'; a.style.textDecoration = 'none'; tools.appendChild(a); }
+    if (CAN_EDIT) {
+      const box = el('div', 'mgrbox'), lab = el('label', 'sub', 'Менеджер:');
+      const inp = el('input'); inp.type = 'text'; inp.value = s.mgr || ''; inp.setAttribute('list', 'mgrlist');
+      inp.placeholder = 'ім’я менеджера'; inp.maxLength = 60; inp.className = 'mgrin';
+      const b3 = el('button', 'btn', 'Зберегти');
+      b3.onclick = () => saveMgr(s, inp.value.trim(), b3);
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') b3.click(); });
+      box.appendChild(lab); box.appendChild(inp); box.appendChild(b3); tools.appendChild(box);
+    }
+    det.appendChild(tools);
+    ['Код', 'Товар', 'Бренд', 'РРЦ', 'Ціна в магазині', 'Відхилення', 'Нижче РРЦ з', 'Перевірено', ''].forEach(x => hr.appendChild(el('th', '', x)));
+    t.appendChild(hr);
+    items.forEach(i => {
+      const tr = el('tr', i.rp === 'same' ? 'rpsame' : '');
+      tr.appendChild(el('td', '', i.v));
+      const n = el('td', 'name', i.n); if (i.nm) n.appendChild(el('span', 'tag', 'за назвою')); if (i.hl) n.appendChild(el('span', 'tag', 'Hotline'));
+      // з 18.11.2026: повторне порушення на рівні позиції
+      if (i.rp === 'same') { const tg = el('span', 'tag rep', '🔁 знову знизив'); tg.title = 'Цю позицію магазин виправляв' + (i.rpFix ? ' ' + i.rpFix : '') + ', а ' + i.rpAt + ' знову опустив ціну нижче РРЦ'; n.appendChild(tg); }
+      tr.appendChild(n);
+      tr.appendChild(el('td', '', i.b));
+      tr.appendChild(el('td', 'num', money(i.rrp)));
+      tr.appendChild(el('td', 'num', money(i.p)));
+      tr.appendChild(el('td', 'neg', pct(i.diff)));
+      tr.appendChild(el('td', 'since', sinceTxt(i.since)));
+      tr.appendChild(el('td', '', i.at));
+      const l = el('td');
+      if (i.u) { const a = el('a', '', 'сторінка ↗'); a.href = i.u; a.target = '_blank'; a.rel = 'noopener'; l.appendChild(a); }
+      tr.appendChild(l);
+      t.appendChild(tr);
+    });
+    det.appendChild(t); box.appendChild(det); list.appendChild(box);
+  });
+  if (!shown) list.appendChild(el('div', 'empty', 'Порушень не знайдено'));
+}
+['fg', 'fb', 'fq', 'fm'].forEach(id => $(id).addEventListener('input', render));
+render();
+}
+</script></body></html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>РРЦ-монітор — контроль рекомендованих цін в інтернет-магазинах</title>
+<meta name="description" content="Щодня перевіряємо, хто з інтернет-магазинів продає ваші товари нижче РРЦ: сайти магазинів, Rozetka, Prom, продавці з Hotline. Звіт з посиланнями на сторінки порушників.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231d2330'/%3E%3Cpath d='M7 21l6-6 4 4 8-9' stroke='%23e5675e' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1d2330;--mute:#5d6576;--line:#e4e7ec;--red:#c8372d;--red-bg:#fdeceb;--green:#1f8a4c;--accent:#2f5bd3}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{background:var(--ink);color:#fff}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;color:#fff;text-decoration:none}
+.logo svg{width:28px;height:28px}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;align-items:center;padding:40px 0 56px}
+h1{font-size:clamp(30px,4.4vw,46px);line-height:1.08;margin:0 0 16px;text-wrap:balance}
+.lead{font-size:18px;color:#c9cfdb;margin:0 0 24px;max-width:560px}
+.btn{display:inline-block;font:inherit;font-weight:600;padding:13px 20px;border-radius:10px;text-decoration:none;background:#e5675e;color:#fff}
+.btn.ghost{background:transparent;color:#fff;border:1px solid #4a5263;margin-left:8px}
+.btn:hover{opacity:.92}
+.sample{background:#fff;color:var(--ink);border-radius:14px;padding:16px;box-shadow:0 18px 40px rgba(0,0,0,.25);font-size:14px}
+.sample .h{display:flex;justify-content:space-between;color:var(--mute);font-size:12px;margin-bottom:10px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.row b{font-weight:600}.row .s{color:var(--mute);font-size:12px}
+.tag{font-size:11px;border-radius:4px;padding:1px 5px;margin-left:6px;border:1px solid var(--line);color:var(--mute)}
+.tag.r{background:#d93025;border-color:#d93025;color:#fff}
+.neg{color:var(--red);font-weight:700;text-align:right;min-width:58px}
+.num{text-align:right;white-space:nowrap}
+section{padding:56px 0}
+h2{font-size:clamp(24px,3vw,32px);line-height:1.15;margin:0 0 24px;text-wrap:balance}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+.card h3{margin:0 0 8px;font-size:18px}.card p{margin:0;color:var(--mute);font-size:16px}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding:0;margin:0;list-style:none}
+.steps li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 20px 20px 64px;position:relative}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:20px;top:18px;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-weight:700;display:grid;place-items:center;font-size:15px}
+.steps b{display:block;margin-bottom:4px}.steps span{color:var(--mute);font-size:16px}
+.cta{background:var(--ink);color:#fff;border-radius:16px;padding:32px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.cta p{margin:0;color:#c9cfdb;max-width:620px}
+.cta h2{margin:0 0 8px;color:#fff}
+footer{color:var(--mute);font-size:14px;padding:28px 0 40px}
+@media(max-width:820px){.hero{grid-template-columns:minmax(0,1fr);padding-top:20px}.grid,.steps{grid-template-columns:minmax(0,1fr)}.btn.ghost{margin:10px 0 0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <a class="logo" href="/"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#2b3345"/><path d="M7 21l6-6 4 4 8-9" stroke="#e5675e" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>РРЦ-монітор</a>
+      <a href="/demo/ecoflow/" style="color:#c9cfdb;font-size:15px">Демо-звіт</a>
+    </div>
+    <div class="hero">
+      <div>
+        <h1>Хто продає ваші товари нижче РРЦ — щодня, з посиланнями</h1>
+        <p class="lead">Для імпортерів, дистриб’юторів і брендів. Перевіряємо сайти інтернет-магазинів, продавців на Rozetka і Prom та магазини з Hotline. Ви отримуєте звіт: хто порушує, на скільки, з якого дня — і посилання на сторінку товару.</p>
+        <a class="btn" href="/demo/ecoflow/">Подивитися демо-звіт</a>
+      </div>
+      <div class="sample" aria-label="Приклад рядків звіту">
+        <div class="h"><span>Магазини нижче РРЦ</span><span>приклад</span></div>
+        <div class="row"><div><b>Магазин А</b><span class="tag r">офіційний партнер</span><div class="s">Зарядна станція, РРЦ 28 999 грн</div></div><div class="num">26 999 грн</div><div class="neg">−6,9%</div></div>
+        <div class="row"><div><b>Магазин Б</b><span class="tag">Prom</span><div class="s">Зарядна станція, РРЦ 52 999 грн</div></div><div class="num">37 799 грн</div><div class="neg">−28,7%</div></div>
+        <div class="row"><div><b>Магазин В</b><span class="tag">сайт</span><div class="s">Зарядна станція, РРЦ 18 999 грн</div></div><div class="num">17 999 грн</div><div class="neg">−5,3%</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Що ви отримуєте</h2>
+    <div class="grid">
+      <div class="card"><h3>Щоденний звіт</h3><p>Сторінка зі списком магазинів нижче РРЦ: товар, ціна, відхилення, з якого дня порушує. Фільтри за брендом і менеджером, вивантаження в Excel.</p></div>
+      <div class="card"><h3>Посилання на порушення</h3><p>Кожна позиція веде на сторінку, де знайдено ціну, — на сайті магазину або в його магазині на маркетплейсі.</p></div>
+      <div class="card"><h3>Хто виправив</h3><p>Видно, хто підняв ціну після звернення, хто прибрав товар, а хто знову знизив ціну після виправлення.</p></div>
+      <div class="card"><h3>Нові магазини</h3><p>Шукаємо не лише серед ваших дилерів: знаходимо нові сайти й продавців, які торгують вашими товарами.</p></div>
+      <div class="card"><h3>Готове звернення</h3><p>Для кожного магазину — текст листа зі списком позицій, цінами й посиланнями. Скопіювати й надіслати.</p></div>
+      <div class="card"><h3>Ціни ринку</h3><p>За потреби — як вибрані моделі продаються по всьому ринку, щоб бачити, чи ваша ціна на рівні.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2>Як почати</h2>
+    <ol class="steps">
+      <li><b>Надішліть прайс з РРЦ</b><span>Excel, XML-фід або посилання на B2B-прайс — коди, назви й рекомендовані ціни.</span></li>
+      <li><b>Перший звіт за кілька днів</b><span>Знаходимо магазини, що продають ваші товари, і перевіряємо ціни.</span></li>
+      <li><b>Далі — щодня</b><span>Звіт оновлюється автоматично в робочі дні, порушення перевіряються повторно.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="cta">
+      <div><h2>Подивіться, як це виглядає</h2><p>Демо-звіт по трьох моделях EcoFlow: офіційні партнери та неофіційні продавці нижче РРЦ, з посиланнями на сторінки товарів.</p></div>
+      <a class="btn" href="/demo/ecoflow/">Відкрити демо-звіт</a>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">РРЦ-монітор · rrcmonitor.com.ua</div></footer>
+</body>
+</html>
