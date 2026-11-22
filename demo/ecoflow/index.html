@@ -53,13 +53,36 @@ a{color:var(--accent)}.empty{color:var(--mute);padding:24px;text-align:center}
 .topnav a:hover{background:var(--bg);color:var(--ink)}.topnav a.on{background:var(--ink);color:#fff}
 .topnav svg{width:16px;height:16px;flex:none}
 @media(max-width:600px){.topnav{display:flex}.topnav a{flex:1;justify-content:center;padding:8px 6px;font-size:13px}}
-</style></head><body><div class="wrap"><a href="/" style="display:inline-block;margin:0 0 14px"><img src="/assets/logo.svg" alt="РРЦ-монітор" height="30" style="display:block"></a>
+
+/* оформлення rrcmonitor */
+.rhead{background:#1d2330;color:#fff;margin:0 0 -56px;padding:18px 0 80px}
+.rhead .in{max-width:1100px;margin:0 auto;padding:0 16px}
+.rhead .bar1{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}
+.rhead .bar1 a{color:#c9cfdb;font-size:14px;text-decoration:none}.rhead .bar1 a:hover{color:#fff}
+.rhead h1{font-size:clamp(24px,3.4vw,34px);line-height:1.15;margin:0 0 6px;color:#fff}
+.rhead .sub{color:#aab2c3;font-size:15px}
+.rhead .pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:4px 10px;font-size:12px;color:#c9cfdb;margin-bottom:14px}
+.rhead .pill i{width:7px;height:7px;border-radius:50%;background:#3ec27a;box-shadow:0 0 0 3px rgba(62,194,122,.2)}
+.wrap{position:relative}
+.kpis{margin-top:0}
+.kpi{box-shadow:0 6px 18px rgba(16,24,40,.08);border-radius:14px;padding:16px 18px}
+.kpi b{font-size:32px;letter-spacing:-.5px}
+.shop{border-radius:14px;transition:box-shadow .15s}.shop:hover{box-shadow:0 4px 14px rgba(16,24,40,.07)}
+.worst{font-variant-numeric:tabular-nums}
+.foot{border-top:1px solid var(--line);padding-top:16px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.foot img{height:22px;opacity:.8}
+</style></head><body><header class="rhead"><div class="in">
+  <div class="bar1"><a href="/"><img src="/assets/logo-light.svg" alt="РРЦ-монітор" height="34" style="display:block"></a><a href="/">rrcmonitor.com.ua</a></div>
+  <div class="pill"><i></i>Автоматична перевірка цін на сайтах магазинів</div>
+  <h1>Моніторинг дотримання РРЦ — EcoFlow</h1>
+  <div class="sub" id="sub"></div>
+</div></header>
+<div class="wrap">
 
 <div class="promo" id="promo" style="display:none"><div class="pt"><b>Безкоштовний доступ до звіту діє до 20:00 (за Києвом) 18 листопада.</b> Залишилось: <span class="tm" id="tm"></span><br>
 <span class="sub">Збережіть поточний стан порушень РРЦ або оформіть підписку, щоб звіт оновлювався щодня.</span></div>
 <div class="pa"><button class="bp" id="pdl">Завантажити звіт в Excel</button><a class="bp ghost" id="psub" href="#">Оформити підписку</a></div></div>
-<div class="promo" style="display:flex"><div class="pt"><b>Демо-звіт: 3 моделі EcoFlow, зріз на 22.11.2026.</b><br><span class="sub">РРЦ — ціна в авторизованому магазині EcoFlow Ukraine (ecoflowukraine.com). Ціни перевірено на сторінках самих магазинів і продавців Rozetka та Prom; кожне посилання веде на сторінку, де знайдено ціну. У повній версії моніторинг охоплює весь асортимент, оновлюється щодня і показує, хто виправив ціну після звернення.</span></div></div><h1>Моніторинг дотримання РРЦ — EcoFlow</h1>
-<div class="sub" id="sub"></div>
+<div class="promo" style="display:flex"><div class="pt"><b>Демо-звіт: 3 моделі EcoFlow, зріз на 22.11.2026.</b><br><span class="sub">РРЦ — ціна в авторизованому магазині EcoFlow Ukraine (ecoflowukraine.com). Ціни перевірено на сторінках самих магазинів і продавців Rozetka та Prom; кожне посилання веде на сторінку, де знайдено ціну. У повній версії моніторинг охоплює весь асортимент, оновлюється щодня і показує, хто виправив ціну після звернення.</span></div></div>
 <div class="kpis" id="kpis"></div>
 <div id="dyn"></div>
 <div id="compl"></div>
