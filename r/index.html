@@ -55,10 +55,7 @@ a{color:var(--accent)}.empty{color:var(--mute);padding:24px;text-align:center}
 @media(max-width:600px){.topnav{display:flex}.topnav a{flex:1;justify-content:center;padding:8px 6px;font-size:13px}}
 </style></head><body><div class="wrap">
 
-<div class="promo" id="promo" style="display:none"><div class="pt"><b>Безкоштовний доступ до звіту діє до 20:00 (за Києвом) 18 листопада.</b> Залишилось: <span class="tm" id="tm"></span><br>
-<span class="sub">Збережіть поточний стан порушень РРЦ або оформіть підписку, щоб звіт оновлювався щодня.</span></div>
-<div class="pa"><button class="bp" id="pdl">Завантажити звіт в Excel</button><a class="bp ghost" id="psub" href="#">Оформити підписку</a></div></div>
-<div class="promo" style="display:flex"><div class="pt"><b>Демо-звіт: 3 моделі EcoFlow, зріз на 22.11.2026.</b><br><span class="sub">РРЦ — ціна в авторизованому магазині EcoFlow Ukraine (ecoflowukraine.com). Ціни перевірено на сторінках самих магазинів і продавців Rozetka та Prom; кожне посилання веде на сторінку, де знайдено ціну. У повній версії моніторинг охоплює весь асортимент, оновлюється щодня і показує, хто виправив ціну після звернення.</span></div></div><h1>Моніторинг дотримання РРЦ — EcoFlow</h1>
+<h1 id="ttl">Моніторинг дотримання РРЦ</h1>
 <div class="sub" id="sub"></div>
 <div class="kpis" id="kpis"></div>
 <div id="dyn"></div>
@@ -174,7 +171,10 @@ function kpi(val, label, cls) { const k = el('div', 'kpi' + (cls ? ' ' + cls : '
 kpi(D.kpi.shops, 'магазинів нижче РРЦ' + (D.kpi.shops !== D.kpi.shopsNoMp ? ' (з них маркетплейсів: ' + (D.kpi.shops - D.kpi.shopsNoMp) + ')' : ''), 'red');
 kpi(D.kpi.items, 'товарних позицій нижче РРЦ', 'red');
 kpi(D.kpi.avg ? pct(D.kpi.avg) : '—', 'середнє відхилення від РРЦ');
-kpi(2, 'з них офіційні партнери EcoFlow', 'red'); kpi('2', 'типи джерел: сайти магазинів і маркетплейси Rozetka/Prom');
+const offN = D.shops.filter(s => s.off).length;
+kpi(offN, 'з них офіційні партнери', offN ? 'red' : '');
+kpi(D.kpi.checkedPages || 0, 'сторінок магазинів перевірено (' + (D.kpi.checkedShops || 0) + ' магазинів)');
+$('ttl').textContent = 'Моніторинг дотримання РРЦ — ' + String(D.supplier).replace(/\s*\(.*\)\s*$/, '');
 if (D.kpi.fixed30) kpi(D.kpi.fixed30, 'позицій виправлено за 30 днів', 'green');
 if (D.kpi.repeat) kpi(D.kpi.repeat, 'магазинів знову знизили ціну після виправлення', 'red');
 
