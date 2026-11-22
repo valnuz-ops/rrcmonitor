@@ -71,6 +71,27 @@ a{color:var(--accent)}.empty{color:var(--mute);padding:24px;text-align:center}
 .worst{font-variant-numeric:tabular-nums}
 .foot{border-top:1px solid var(--line);padding-top:16px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .foot img{height:22px;opacity:.8}
+/* полірування: вирівнювання позначок, мобільна версія */
+:focus-visible{outline:2px solid #e5675e;outline-offset:2px}
+.rhead .bar1 img{height:34px;width:auto}
+.shop>button{grid-template-columns:minmax(0,1fr) auto auto}
+.shop>button>div:first-child{min-width:0;overflow-wrap:anywhere}
+.tag,.mgr{display:inline-block;vertical-align:middle;position:relative;top:-1px;line-height:1.5;padding:0 5px;white-space:nowrap}
+.worst,.cnt{white-space:nowrap}
+.filters{align-items:stretch}.filters .btn{padding:8px 14px}
+.kpis~.promo{margin:16px 0 0}
+.promo .sub{display:inline-block;margin-top:4px;max-width:900px}
+@media(max-width:600px){
+  .rhead{padding:14px 0 76px}.rhead .bar1{margin-bottom:20px}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .kpi{padding:12px 14px}.kpi b{font-size:26px}.kpi span{display:block;line-height:1.35}
+  .kpi:last-child:nth-child(odd){grid-column:1/-1}
+  .shop>button{grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:12px 14px}
+  .tools{padding:10px 14px}.tools .btn{flex:1 1 auto;text-align:center}
+  .filters .btn{flex:1 1 100%;text-align:center}
+  th,td{padding:8px 10px}td.name{min-width:190px}
+  h2{margin-top:28px}
+}
 </style></head><body><header class="rhead"><div class="in">
   <div class="bar1"><a href="/"><img src="/assets/logo-light.svg" alt="РРЦ-монітор" height="34" style="display:block"></a><a href="/">rrcmonitor.com.ua</a></div>
   <div class="pill"><i></i>Автоматична перевірка цін на сайтах магазинів</div>
@@ -82,8 +103,8 @@ a{color:var(--accent)}.empty{color:var(--mute);padding:24px;text-align:center}
 <div class="promo" id="promo" style="display:none"><div class="pt"><b>Безкоштовний доступ до звіту діє до 20:00 (за Києвом) 18 листопада.</b> Залишилось: <span class="tm" id="tm"></span><br>
 <span class="sub">Збережіть поточний стан порушень РРЦ або оформіть підписку, щоб звіт оновлювався щодня.</span></div>
 <div class="pa"><button class="bp" id="pdl">Завантажити звіт в Excel</button><a class="bp ghost" id="psub" href="#">Оформити підписку</a></div></div>
-<div class="promo" style="display:flex"><div class="pt"><b>Демо-звіт: 3 моделі EcoFlow, зріз на 22.11.2026.</b><br><span class="sub">РРЦ — ціна в авторизованому магазині EcoFlow Ukraine (ecoflowukraine.com). Ціни перевірено на сторінках самих магазинів і продавців Rozetka та Prom; кожне посилання веде на сторінку, де знайдено ціну. У повній версії моніторинг охоплює весь асортимент, оновлюється щодня і показує, хто виправив ціну після звернення.</span></div></div>
 <div class="kpis" id="kpis"></div>
+<div class="promo" style="display:flex"><div class="pt"><b>Демо-звіт: 3 моделі EcoFlow, зріз на 22.11.2026.</b><br><span class="sub">РРЦ — ціна в авторизованому магазині EcoFlow Ukraine (ecoflowukraine.com). Ціни перевірено на сторінках самих магазинів і продавців Rozetka та Prom; кожне посилання веде на сторінку, де знайдено ціну. У повній версії моніторинг охоплює весь асортимент, оновлюється щодня і показує, хто виправив ціну після звернення.</span></div></div>
 <div id="dyn"></div>
 <div id="compl"></div>
 <h2>Магазини, що продають нижче РРЦ</h2>
